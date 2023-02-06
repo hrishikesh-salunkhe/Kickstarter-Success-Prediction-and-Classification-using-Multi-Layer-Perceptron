@@ -1,0 +1,5 @@
+flask==2.2.2
+numpy==1.23.3
+syllables==1.0.6
+textstat==0.7.3
+readability==0.3.1

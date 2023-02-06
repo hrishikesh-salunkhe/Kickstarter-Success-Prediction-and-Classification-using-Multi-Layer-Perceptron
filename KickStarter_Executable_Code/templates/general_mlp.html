@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+<!--   <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ --> 
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+<style>
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  padding-right: 80px;
+}
+
+.navbar a {
+  float: right;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #1c87c9;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+input { 
+padding: 0;
+margin: 0;
+outline: none;
+font-family: Roboto, Arial, sans-serif;
+font-size: 16px;
+color: #eee;
+}
+
+h2 {
+font-size: 32px;
+color:black;
+}
+h3 {
+color: #1c87c9;
+}
+.main-block{
+display: flex;
+flex-direction: column;
+}
+.main-block {
+justify-content: center;
+align-items: center;
+width: 100%; 
+min-height: 100%;
+border-color:red;
+background-size: cover;
+}
+form {
+width: 80%; 
+padding: 25px;
+margin-bottom: 20px;
+background: rgba(0, 0, 0, 0.9);
+}
+input {
+padding: 5px;
+margin-bottom: 20px;
+background: transparent;
+border: none;
+border-bottom: 1px solid #eee;
+}
+input::placeholder {
+color: #eee;
+}
+
+
+
+
+button.btn {
+display: block;
+width: 200px;
+padding: 10px;
+margin: 20px auto 0;
+border: none;
+border-radius: 5px; 
+background: #1c87c9; 
+font-size: 14px;
+font-weight: 600;
+color: #fff;
+}
+button:hover {
+background: #095484;
+}
+
+input {
+width: 46%;
+}
+
+p{
+  font-size: 16px;
+  color: white;
+  margin-left: 1%;
+}
+
+select{
+  background:#1c87c9;
+  color: #fff; 
+  border-radius: 5px; 
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+
+
+<div class="navbar">
+    
+    
+ 
+<div class="dropdown">
+
+    <button class="dropbtn">Statistics</button>
+  <div class="dropdown-content">
+   <a href="/stats" class="w3-button w3-black">Overview-Stats</a>
+     
+     <a href="/catstats" class="w3-button w3-black">CategoryWise-Stats</a>
+
+     
+  </div>
+  
+ 
+</div>    
+
+
+
+<div class="dropdown">
+
+    <button class="dropbtn">MLP</button>
+  <div class="dropdown-content">
+   <a href="/rewards_mlp" class="w3-button w3-black">Rewards-MLP</a>
+     
+     <a href="/content_mlp" class="w3-button w3-black">Content-MLP</a>
+
+     <a href="/general_mlp" class="w3-button w3-black">General-MLP</a>
+     <a href="/description_mlp" class="w3-button w3-black">Description-MLP</a>
+     
+  </div>
+  
+ 
+</div>
+
+
+  <div class="dropdown">
+   <button class="dropbtn">Linear Regression</button>
+  <div class="dropdown-content">
+    <a href="/apg" class="w3-button w3-black">Amount Pledged On General Dataset</a>
+    <a href="/apr" class="w3-button w3-black">Amount Pledged On Rewards Dataset</a>
+    <a href="/apc" class="w3-button w3-black">Amount Pledged On Content Dataset</a>
+    <a href="/apd" class="w3-button w3-black">Amount Pledged On Description Dataset</a>
+  </div>
+ 
+</div>
+ <a href="/about">About</a>    
+       <a href="/">Home</a>
+      <p >KickStarter Project Predicting Tool </p>
+</div>
+ <div class="main-block" align="center">
+ 
+	<h2>Predict KickStarter General Success</h2>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('general')}}"method="post">
+    	<input type="number" name="goal" placeholder="Goal Amount Of Project" required="required" />
+	 <br>	
+        <label for="category" style="color: white">Category:</label>
+    <select name="category" id="category" style="width:200px;">
+            <option value="0">Poetry</option>
+            <option value="1">Narrative Film</option>
+            <option value="2">Music</option>
+            <option value="4">Food</option>
+            <option value="3">Restaurants</option>           
+            <option value="5">Drinks</option>
+            <option value="6">Non Fiction</option>
+            <option value="7">Indie Rock</option>           
+            <option value="8">Craft</option>
+            <option value="9">Games</option>            
+            <option value="10">Tabletop Games</option>
+            <option value="11">Design</option>
+            <option value="12">Comic Books</option>           
+            <option value="13">Art Books</option>       
+            <option value="14">Fashion</option>                    
+            <option value="15">Childrenswear</option>               
+            <option value="16">Theater</option>
+
+            <option value="17">Comics</option>           
+            <option value="18">DIY</option>               
+            <option value="19">Web Series</option>
+            <option value="20">Animation</option>           
+            <option value="21">Food Trucks</option>       
+            <option value="22">Product Design</option>                    
+            <option value="23">Public Art</option>               
+            <option value="24">Documentary</option>
+            <option value="25">Illlusion</option>           
+            <option value="26">Photography</option>       
+            <option value="27">Pop</option>                    
+            <option value="28">People</option>               
+            <option value="29">Art</option>
+            <option value="30">Family</option>           
+            <option value="31">Fiction</option>       
+            <option value="32">Film & Video</option>                    
+            <option value="33">Accessories</option>               
+            <option value="34">Rock</option>
+            <option value="35">Hardware</option>           
+            <option value="36">Software</option>       
+            <option value="37">Weaving</option>                    
+            <option value="39">Jazz</option>               
+            <option value="38">Web</option>
+            <option value="40">Ready-To-Wear</option>           
+            <option value="41">Festivals</option>       
+            <option value="42">Video games</option>                    
+            <option value="43">Anthologies</option>               
+            <option value="45">Shorts</option>
+            <option value="44">Publishing</option>           
+            <option value="46">Gadgets</option>       
+            <option value="47">Electronic Music</option>                    
+            <option value="48">Radio & Podcasts</option>               
+            <option value="49">Cookbooks</option>
+            <option value="50">Apparel</option>           
+            <option value="51">Metal</option>       
+            <option value="52">Comedy</option>                   
+            <option value="53">Hip-Hop</option>         
+            <option value="54">Periodicals</option>
+            <option value="57">Painting</option>          
+            <option value="55">Dance</option>       
+            <option value="56">Technology</option>                    
+            <option value="58">World Music</option>               
+            <option value="59">Photobooks</option>
+            <option value="60">Drama</option>           
+            <option value="61">Architecture</option>       
+            <option value="62">Young Adult</option>                    
+            <option value="63">Latin</option>               
+            <option value="64">Mobile Games</option>
+            <option value="65">Flight</option>           
+            <option value="66">Fine Art</option>       
+            <option value="68">Playing Cards</option>                    
+            <option value="67">Action</option>               
+            <option value="69">Makerspaces</option>
+            <option value="70">Punk</option>           
+            <option value="71">Children's Books</option>       
+            <option value="72">Apps</option>                    
+            <option value="73">Audio</option>               
+            <option value="74">Performance Arts</option>
+            <option value="75">Ceramics</option>           
+            <option value="78">Fabrication Tools</option>       
+            <option value="76">Vegan</option>                    
+            <option value="77">Graphic Novels</option>               
+            <option value="79">Performances</option>
+            <option value="80">Sculpture</option>           
+            <option value="81">Sound</option>       
+            <option value="82">Stationery</option>                    
+            <option value="83">Print</option>               
+            <option value="84">Farmer's Markets</option>
+            <option value="85">Thrillers</option>           
+            <option value="86">Events</option>       
+            <option value="87">Classical Music</option>                    
+            <option value="88">Graphic Design</option>               
+            <option value="89">Spaces</option>
+            <option value="90">Country & Folk</option>           
+            <option value="91">Wearables</option>       
+            <option value="92">Journalism</option>                    
+            <option value="93">Mixed Media</option>               
+            <option value="94">Movie Theaters</option>
+            <option value="95">Animals</option>           
+            <option value="96">Digital Art</option>       
+            <option value="97">Knitting</option>                    
+            <option value="98">Installations</option>               
+            <option value="99">Community Gardens</option>
+            
+            <option value="100">DIY Electronics</option>
+            <option value="101">Embroidery</option>
+            <option value="102">Camera Equipment</option>
+            <option value="103">Jewelry</option>           
+            <option value="104">Farms</option>
+            <option value="105">Conceptual Art</option>
+            <option value="106">Fantasy</option>           
+            <option value="107">Webcomics</option>
+            <option value="108">Horror</option>            
+            <option value="109">Experimental</option>
+            <option value="110">Science Fiction</option>           
+            <option value="111">Puzzles</option>       
+            <option value="112">R&B</option>                    
+            <option value="113">Music Videos</option>               
+            <option value="114">Video</option>
+
+            <option value="115">Plays</option>           
+            <option value="116">Blues</option>       
+            <option value="118">Faith</option>                    
+            <option value="119">Live Games</option>               
+            <option value="117">Bacon</option>
+            <option value="120">Small Batch</option>           
+            <option value="121">Woodworking</option>       
+            <option value="122">Places</option>                    
+            <option value="123">Foootwear</option>               
+            <option value="124">3D Printing</option>
+            <option value="125">Zines</option>           
+            <option value="126">Musical</option>       
+            <option value="127">Workshops</option>                    
+            <option value="128">Photo</option>               
+            <option value="129">Immersive </option>
+            <option value="130">Letterpress</option>           
+            <option value="131">Acedemic</option>       
+            <option value="132">Candles</option>                    
+            <option value="133">TV</option>               
+            <option value="134">Space Exploration</option>
+            <option value="135">Gaming Hardware</option>           
+            <option value="136">Nature</option>       
+            <option value="137">Robots</option>                    
+            <option value="138">Typography</option>               
+            <option value="139">Translations</option>
+            <option value="140">Calendars</option>           
+            <option value="141">Textiles</option>       
+            <option value="142">Pottery</option>                    
+            <option value="143">Interactive Design</option>               
+            <option value="144">Video Art</option>
+         <option value="145">Glass</option>           
+            <option value="146">Pet Fashion</option>       
+            <option value="147">Crochet</option>                    
+            <option value="148">Printing</option>               
+            <option value="149">Romance</option>
+            <option value="150">Civic Design</option>           
+            <option value="151">Kids</option>       
+            <option value="152">Literary Journals</option>           
+            <option value="153">Couture</option>                    
+            <option value="154">Taxiderny</option>               
+            <option value="155">Quilts</option>
+            <option value="156">Chiptune</option>       
+            <option value="157">Residencies<option>                    
+            <option value="158">Literary Spaces</option>     
+
+    </select><br><br>
+
+
+
+
+		    <label for="maincategory" style="color: white">MainCategory:</label>
+    <select name="maincategory" id="maincategory" style="width:160px;">
+            
+            <option value="0">Publishing</option>
+            <option value="1">Film&Studio</option>
+            <option value="2">Music</option>
+            <option value="3">Food</option>           
+            <option value="4">Crafts</option>
+            <option value="5">Games</option>
+            <option value="6">Design</option>           
+            <option value="7">Comics</option>
+            <option value="8">Fashion</option>            
+            <option value="9">Theater</option>
+            <option value="10">Art</option>           
+            <option value="11">Photography</option>       
+            <option value="12">Technology</option>                    
+            <option value="13">Dance</option>               
+            <option value="14">Journalism</option>
+          
+    </select><br><br>
+  
+
+
+    <label for="country" style="color: white">Country:</label>
+        <select name="country" id="country" style="width:200px;">
+            <option value="0">United Kingdom</option>
+            <option value="1">United States</option>
+            <option value="2">Canada</option>
+            <option value="3">Australia</option>            
+            <option value="4">Norway</option>
+            <option value="5">Italy</option>
+            <option value="6">Germany</option>            
+            <option value="7">Ireland</option>
+            <option value="8">Mexico</option>           
+            <option value="9">Spain</option>
+            <option value="10">Sweden</option>            
+            <option value="11">France</option>        
+            <option value="12">New Zealand</option>                   
+            <option value="13">Switzerland</option>
+                
+            <option value="14">Austria</option>                   
+            <option value="15">Belgium</option>   
+            <option value="16">Denmark</option>                   
+            <option value="17">Hong Kong</option>
+            
+            <option value="18">Netherlands</option>                   
+            <option value="19">Luxemborg</option>   
+            <option value="20">Singapore</option>                   
+            <option value="22">Japan</option>
+          
+    </select><br><br>	
+    <label for="currency" style="color: white">Currency:</label>
+    <select name="currency" id="currency" style="width:190px;">
+            <option value="0">British Pound</option>
+            <option value="1">US Dollars</option>
+            <option value="2">Canadian Dollars</option>
+            <option value="3">Australian Dollars</option>           
+            <option value="4">Norwegian Krone</option>
+            <option value="5">Euros</option>
+            <option value="6">Mexican Peso</option>           
+            <option value="7">Swedish Krona</option>
+            <option value="8">New Zealand Dollar</option>           
+            <option value="9">Swiss Franc</option>
+            <option value="10">Danish Krone</option>            
+            <option value="11">Hong Kong Dollar</option>        
+            <option value="12">Singapore Dollar</option>                    
+            <option value="13">Japanese Yen</option>
+          
+    </select><br><br>
+    
+		<input type="number" name="duration" placeholder="Number Of Days For Project Fundraiser" required="required" />
+		  
+                
+    	
+		
+        <button type="submit" class="btn">Predict</button>
+    </form>
+    <br>
+    
+
+   {{ prediction_text }}
+
+ </div>
+
+
+</body>
+</html>

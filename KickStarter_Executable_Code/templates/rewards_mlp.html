@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+<!--   <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ --> 
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+<style>
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  padding-right: 80px;
+  
+}
+
+.navbar a {
+  float: right;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #1c87c9;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+input { 
+padding: 0;
+margin: 0;
+outline: none;
+font-family: Roboto, Arial, sans-serif;
+font-size: 16px;
+color: #eee;
+}
+
+h2 {
+font-size: 32px;
+color:black;
+}
+h3 {
+color: #1c87c9;
+}
+.main-block{
+display: flex;
+flex-direction: column;
+}
+.main-block {
+justify-content: center;
+align-items: center;
+width: 100%; 
+min-height: 100%;
+border-color:red;
+background-size: cover;
+}
+form {
+width: 80%; 
+padding: 25px;
+margin-bottom: 20px;
+background: rgba(0, 0, 0, 0.9);
+}
+input {
+padding: 5px;
+margin-bottom: 20px;
+background: transparent;
+border: none;
+border-bottom: 1px solid #eee;
+}
+input::placeholder {
+color: #eee;
+}
+
+
+
+
+button.btn {
+display: block;
+width: 200px;
+padding: 10px;
+margin: 20px auto 0;
+border: none;
+border-radius: 5px; 
+background: #1c87c9; 
+font-size: 14px;
+font-weight: 600;
+color: #fff;
+}
+button:hover {
+background: #095484;
+}
+
+input {
+width: 46%;
+}
+
+p{
+  font-size: 16px;
+  color: white;
+  margin-left: 1%;
+}
+
+label{
+ vertical-align: middle;
+}
+select{
+  background:#1c87c9;
+  color: #fff; 
+  border-radius: 5px; 
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+
+
+<div class="navbar">
+    
+    
+ 
+<div class="dropdown">
+
+    <button class="dropbtn">Statistics</button>
+  <div class="dropdown-content">
+   <a href="/stats" class="w3-button w3-black">Overview-Stats</a>
+     
+     <a href="/catstats" class="w3-button w3-black">CategoryWise-Stats</a>
+
+     
+  </div>
+  
+ 
+</div>    
+
+
+
+<div class="dropdown">
+
+    <button class="dropbtn">MLP</button>
+  <div class="dropdown-content">
+   <a href="/rewards_mlp" class="w3-button w3-black">Rewards-MLP</a>
+     
+     <a href="/content_mlp" class="w3-button w3-black">Content-MLP</a>
+
+     <a href="/general_mlp" class="w3-button w3-black">General-MLP</a>
+     <a href="/description_mlp" class="w3-button w3-black">Description-MLP</a>
+     
+  </div>
+  
+ 
+</div>
+
+
+  <div class="dropdown">
+
+    <button class="dropbtn">Linear Regression</button>
+  <div class="dropdown-content">
+    <a href="/apg" class="w3-button w3-black">Amount Pledged On General Dataset</a>
+    <a href="/apr" class="w3-button w3-black">Amount Pledged On Rewards Dataset</a>
+    <a href="/apc" class="w3-button w3-black">Amount Pledged On Content Dataset</a>
+    <a href="/apd" class="w3-button w3-black">Amount Pledged On Description Dataset</a>
+  </div>
+ 
+</div>
+ <a href="/about">About</a>    
+       <a href="/">Home</a>
+      <p >KickStarter Project Predicting Tool </p>
+</div>
+
+ <div class="main-block" align="center">
+ 
+	<h2>Predict KickStarter Rewards Success</h2>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('rewards')}}" method="post">
+    	<input type="number" name="goal" placeholder="Goal Amount For Project" required="required" />
+		<br>
+        <input type="number" name="levels" placeholder="Number Of Reward Levels" required="required" />
+		<br>
+        <input type="number" name="duration" placeholder="Number Of Days For Project Fundraiser" required="required" />
+        <br>
+      <label for="maincategory" style="color: white">MainCategory:</label>
+      <select name="maincategory" id="maincategory" style="width:160px;">
+            
+           
+            <option value="0">Film&Studio</option>
+            <option value="1">Games</option>
+            <option value="2">Fashion</option>
+            <option value="3">Music</option>
+            <option value="4">Art</option>
+            <option value="5">Technology</option>                    
+            <option value="6">Dance</option>               
+            <option value="7">Publishing</option>          
+            <option value="8">Theater</option>
+            <option value="9">Comics</option>
+            <option value="10">Design</option>           
+            <option value="11">Photography</option>       
+            <option value="12">Food</option>           
+            
+    </select><br><br>
+           <label for="category" style="color: white">Category:</label>
+    <select name="category" id="category" class="custom-select" style="width:180px;">
+<option value="0">Short Film</option>
+<option value="1">Board & Card Games</option>
+<option value="2">Documentary</option>
+<option value="3">Fashion</option>            
+<option value="4">Music</option>
+<option value="5">Illustration</option>
+<option value="6">Open Software</option>            
+<option value="7">Indie Rock</option>
+<option value="8">Dance</option>           
+<option value="9">Fiction</option>
+<option value="10">Non Fiction</option>            
+<option value="11">Film & Video</option>        
+<option value="12">Theater</option>                   
+<option value="13">Games </option>                
+<option value="14">Art Book</option>
+<option value="15">Animation</option>    
+<option value="16">Country & Folk</option>                   
+<option value="17">Comics</option>
+<option value="18">Web Series</option>                   
+<option value="19">Technology</option>    
+<option value="20">Performance Art</option>                   
+<option value="21">Narrative Film</option> 
+<option value="22">Video Games</option>                    
+<option value="23">Product Design</option>
+<option value="24">Painting</option>                   
+<option value="25">Photography</option>                   
+<option value="26">Conceptual Art</option>
+<option value="27">Rock</option>
+<option value="28">Jazz</option>
+<option value="29">Classical Music</option>                   
+<option value="30">Food</option>
+<option value="31">Art</option>
+<option value="32">Pop</option>       
+<option value="33">Journalism</option> 
+<option value="34">Poetry</option>
+<option value="35">World Music</option>
+<option value="36">Sculpture</option>
+<option value="37">Publishing</option>       
+<option value="38">Electronic Music</option> 
+<option value="39">Children's Book</option>
+<option value="40">Open Hardware</option>
+<option value="41">Graphic Design</option>       
+<option value="42">Hip-Hop</option>
+<option value="43">Public Art</option>
+<option value="44">Mixed Media</option>        
+<option value="45">Periodical</option>
+<option value="46">Crafts</option>
+<option value="47">Design</option>       
+<option value="48">Digital Art</option>
+<!-- <option value="49">Cookbooks</option>
+<option value="50">Apparel</option>       
+<option value="51">Metal</option> -->
+                    
+                  
+    </select><br><br>
+        <input type="number" name="minreward" placeholder="Minimum Reward Given" required="required" />
+        <br>
+        <input type="number" name="maxreward" placeholder="Maximum Reward Given" required="required" />
+        <br>
+        <input type="number" name="meanreward" placeholder="Mean Reward Given" required="required" />
+                
+    	
+		
+        <button type="submit" class="btn">Predict</button>
+    </form>
+    
+    
+ 
+   {{ prediction_text }}
+
+ </div>
+
+
+</body>
+</html>
