@@ -1,5 +1,4 @@
 # Kickstarter-Success-Prediction-and-Classification-using-Multi-Layer-Perceptron
-Kickstarter Success Prediction and Classification using Multi Layer Perceptron
 
 THIS PROJECT IS LIVE AT: http://hsalunkhe.pythonanywhere.com
 
@@ -16,4 +15,4 @@ Using this interface entrepreneurs can fine tune each and every parameter and in
 HOW TO RUN:
 1. Download the "Kickstarter_Executable_Code" folder
 2. Install all the python libraries mentioned in the "requirements.txt" file
-3. Run "python -m flask run" in the command line inside folder
+3. Run "python -m flask run" in the command line
